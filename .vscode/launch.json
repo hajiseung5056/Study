@@ -3,6 +3,27 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Q23_2_2",
+      "request": "launch",
+      "mainClass": "Java.Q23_2_2",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
+      "name": "Q23_3_13",
+      "request": "launch",
+      "mainClass": "Java.Q23_3_13",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
+      "name": "Q23_3_11",
+      "request": "launch",
+      "mainClass": "Java.Q23_3_11",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
       "name": "Q23_3_1",
       "request": "launch",
       "mainClass": "Java.Q23_3_1",
