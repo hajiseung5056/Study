@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Q23_1_1",
+      "request": "launch",
+      "mainClass": "Java.Q23_1_1",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
       "name": "Q23_2_14",
       "request": "launch",
       "mainClass": "Java.Q23_2_14",
