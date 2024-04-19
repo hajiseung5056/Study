@@ -3,6 +3,41 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Q22_3_20",
+      "request": "launch",
+      "mainClass": "Java.Q22_3_20",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
+      "name": "Q22_3_19",
+      "request": "launch",
+      "mainClass": "Java.Q22_3_19",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
+      "name": "Q23_1_20",
+      "request": "launch",
+      "mainClass": "Java.Q23_1_20",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
+      "name": "Q23_1_17",
+      "request": "launch",
+      "mainClass": "Java.Q23_1_17",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
+      "name": "Q23_1_14",
+      "request": "launch",
+      "mainClass": "Java.Q23_1_14",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
       "name": "Q23_1_1",
       "request": "launch",
       "mainClass": "Java.Q23_1_1",
