@@ -3,6 +3,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Q22_1_3",
+      "request": "launch",
+      "mainClass": "Java.Q22_1_3",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
+      "name": "Q22_2_17",
+      "request": "launch",
+      "mainClass": "Java.Q22_2_17",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
       "name": "Q22_2_7",
       "request": "launch",
       "mainClass": "Java.Q22_2_7",
