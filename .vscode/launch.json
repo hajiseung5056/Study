@@ -3,6 +3,55 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Q20_2_19",
+      "request": "launch",
+      "mainClass": "Java.Q20_2_19",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
+      "name": "Q20_2_5",
+      "request": "launch",
+      "mainClass": "Java.Q20_2_5",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
+      "name": "Q20_3_17",
+      "request": "launch",
+      "mainClass": "Java.Q20_3_17",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
+      "name": "Q20_3_15",
+      "request": "launch",
+      "mainClass": "Java.Q20_3_15",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
+      "name": "Q20_4_19",
+      "request": "launch",
+      "mainClass": "Java.Q20_4_19",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
+      "name": "Q20_4_6",
+      "request": "launch",
+      "mainClass": "Java.Q20_4_6",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
+      "name": "Q20_4_5",
+      "request": "launch",
+      "mainClass": "Java.Q20_4_5",
+      "projectName": "Study_81140df1"
+    },
+    {
+      "type": "java",
       "name": "Q21_1_17",
       "request": "launch",
       "mainClass": "Java.Q21_1_17",
@@ -148,8 +197,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Study/C",
-      "program": "c:/Study/C/build/Debug/outDebug",
+      "cwd": "c:/Study/Python",
+      "program": "c:/Study/Python/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
