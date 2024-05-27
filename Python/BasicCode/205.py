@@ -1,4 +1,4 @@
-hello()
+#hello()
 
 def hello():
     print("Hi")
