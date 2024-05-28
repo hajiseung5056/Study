@@ -3,4 +3,6 @@ def covert_int(string):
     return result
     
 
-covert_int("1,234,567")
+a = covert_int("1,234,567")
+
+print(type(a))
