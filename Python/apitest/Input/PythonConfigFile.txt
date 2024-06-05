@@ -1,0 +1,9 @@
+[Var]
+folder_path_fir=C:\Study\Python\apitest\Input\Working
+input_folder_path=C:\Study\Python\apitest\Input
+output_folder_path=C:\Study\Python\apitest\Output
+log_file_name=Çù·Â»ç°ü¸®_Log
+
+site_url=https://hyundaigrp.sharepoint.com/sites/RPA_HDEL_HD950_HD
+id=hyundai_rpa@hyundaimovex.com
+pwd=Hyundai1234
