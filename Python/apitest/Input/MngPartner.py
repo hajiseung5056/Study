@@ -117,6 +117,14 @@ def append_txt(result, folder_path, file_name):
     except Exception as e:
         print(e)
 
+def extract_between_using_regex(text, start_char, end_char):
+    # Construct the regular expression pattern
+    pattern = re.escape(start_char) + "(.*?)" + re.escape(end_char)
+    match = re.search(pattern, text)
+    if match:
+        return match.group(1)
+    else:
+        return ""
 
 def PostForm(url, headers, field_data): # Post Parameter의 형식이 MultipartForm 일 때, Wrapping해주는 Function
     try:
@@ -179,19 +187,23 @@ class PartnerManagement():
     def getMngNum(self): # 국가 승강기 정보센터의 대상 데이터를 조회할 때 사용할 키 값 mng1, mng2 추출
         try:
             headers = self.headers
-            payload = {'serviceKey': '%2BK56DZWJ9yasuWMqXf0v3TOvOCUqPCTSAx%2BgBIrjGGjfYwb21G98FecJ%2Fa4T7I9RYZhUm6fRaKgM4q8qn%2F%2FW2Q%3D%3D','elevator_no':elv_no}
+            payload = {'serviceKey': '+K56DZWJ9yasuWMqXf0v3TOvOCUqPCTSAx+gBIrjGGjfYwb21G98FecJ/a4T7I9RYZhUm6fRaKgM4q8qn//W2Q==','elevator_no':elv_no}
             headers['Content-Type'] = 'application/x-www-form-urlencoded'
             url = 'http://openapi.elevator.go.kr/openapi/service/ElevatorInformationService/getElevatorViewM'
             s = requests.get(url, payload).text
-            tkinter.messagebox.showinfo("info",s)
+            tkinter.messagebox.showinfo("response",s)
             if s == 'X':
                 raise "authToken 생성 실패"
-            soup = bs(s, "html.parser")
-
-            elements = soup.select("td.txt_center > a[style='color:blue;']")[0]['onclick']
-            s = elements[elements.find("fnElvtrDetail")+len("fnElvtrDetail"):elements.find(";")]
-            mng1 = s.split(",")[0].replace("(","")[1:-1]
-            mng2 = s.split(",")[1][1:-1]
+            
+            mng1 = extract_between_using_regex(s, '<elvtrMgtNo1>', '</elvtrMgtNo1>')
+            mng2 = extract_between_using_regex(s, '<elvtrMgtNo2>', '</elvtrMgtNo2>')
+            #soup = bs(s, "html.parser")
+            tkinter.messagebox.showinfo("mng1",mng1)
+            tkinter.messagebox.showinfo("mng2",mng2)
+            #elements = soup.select("td.txt_center > a[style='color:blue;']")[0]['onclick']
+            #s = elements[elements.find("fnElvtrDetail")+len("fnElvtrDetail"):elements.find(";")]
+            #mng1 = s.split(",")[0].replace("(","")[1:-1]
+            #mng2 = s.split(",")[1][1:-1]
 
             self.mng1 = mng1
             self.mng2 = mng2
@@ -368,7 +380,7 @@ class PartnerManagement():
                         self.WriteNoData()
                         break
                     raise Exception('MngNo 추출 실패')
-                tkinter.messagebox.showinfo("info","getMngNum Finish")
+                
                 self.getMntCpnyNm()
                 if self.sucFlag == 'X':
                     raise Exception('점검업체 코드 추출 API 조회 실패')
