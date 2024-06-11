@@ -425,8 +425,8 @@ def work_function(id, elvNo,folderPath):
     PartnerManagement(id, elvNo,folderPath)
 
 
-
-with ThreadPoolExecutor() as executor:
+# 실제 수행 부분
+with ThreadPoolExecutor() as executor:          # with절 : 쓰레드사용 후 자원 반납
     for i, elv_no in enumerate(elv_no_list):
         folderPath = folder_path_fir
         # if i <= floor_total_cnt:
@@ -440,6 +440,6 @@ with ThreadPoolExecutor() as executor:
 # Finish log
 with open(rf"{input_folder_path}\finish.txt",'w') as f:
     f.write(str(datetime.datetime.now() - now)[:11])
-msg = "finish"
+msg = "finish"  
 print(msg)
 clipboard.copy(msg)
