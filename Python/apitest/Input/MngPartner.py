@@ -137,6 +137,7 @@ def PostForm(url, headers, field_data): # Post Parameter의 형식이 MultipartF
         tkinter.messagebox.showinfo("error_PostForm",e)
         return 'X'
 
+# 수행 순서 3
 class PartnerManagement():
     def __init__(self, id, elvNo, working) -> None:
         self.id = id # Thread 구분을 위한 ID
@@ -364,6 +365,7 @@ class PartnerManagement():
             f.write(f"selfInscptM1De=수정필요\n")
             f.write(f"selfInscptM1CpnyNm=수정필요\n")
 
+    # 수행 순서 4
     def main(self):
         # global excel_row_cnt
         start = time.time()
