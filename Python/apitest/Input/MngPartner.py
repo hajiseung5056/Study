@@ -419,13 +419,13 @@ if not os.path.isdir(folder_path_fir):
 
 
 
-
+# 수행 순서 2
 def work_function(id, elvNo,folderPath):
     # next(api_rate_limiter)
     PartnerManagement(id, elvNo,folderPath)
 
 
-# 실제 수행 부분
+# 수행 순서 1
 with ThreadPoolExecutor() as executor:          # with절 : 쓰레드사용 후 자원 반납
     for i, elv_no in enumerate(elv_no_list):
         folderPath = folder_path_fir
