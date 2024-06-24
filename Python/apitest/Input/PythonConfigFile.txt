@@ -3,6 +3,7 @@ folder_path_fir=C:\Study\Python\apitest\Input\Working
 input_folder_path=C:\Study\Python\apitest\Input
 output_folder_path=C:\Study\Python\apitest\Output
 log_file_name=Çù·Â»ç°ü¸®_Log
+serviceKey=h6WQ5EyIENr0j5IqnKFhtVbdK7nXBpq2EBlaaGEgJD%2FsUqTAgTY%2Bn81YuHMo569NPWBpOJl5C9dWAwGCWfv%2FLw%3D%3D
 
 site_url=https://hyundaigrp.sharepoint.com/sites/RPA_HDEL_HD950_HD
 id=hyundai_rpa@hyundaimovex.com

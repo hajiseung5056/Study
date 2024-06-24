@@ -1,6 +1,8 @@
+import tkinter
 import datetime
-from dateutil.relativedelta import relativedelta
+import tkinter.messagebox
 import requests
+# import math
 import clipboard
 import time
 
@@ -15,9 +17,6 @@ from collections.abc import Iterator
 from threading import Lock
 from concurrent.futures import ThreadPoolExecutor
 
-import pymssql
-import xmltodict
-
 now = datetime.datetime.now() # 현재시간
 
 ''' 
@@ -26,7 +25,6 @@ now = datetime.datetime.now() # 현재시간
         - clipboard
         - requests-toolbelt
         - bs4 (Beautiful Soup4)
-        - pymssql
 '''
 
 # _lock = Lock() # Thread Lock을 방지하기 위한 Global Lock 생성
@@ -42,7 +40,6 @@ elv_no_list = []
 ###################################################### 작업대상 파일 분류
 # PROD
 elv_udt_path = sys.argv[1] # ex) elvUdtList_Sch_ConPass.txt, elvUdtList_Sch_Fail.txt ...
-# elv_udt_path = r"C:\RPA_Working\HDEL\ServiceMgmt\P60003_PartnerManagement\Input\elevatorNoList.txt"
 # elv_udt_path = r'C:\Users\Administrator\Desktop\협력사관리\Input\elvUdtList_Sch_Fail.txt'
 # elv_udt_path = r'C:\Users\Administrator\Desktop\새 폴더\협력사관리\Input\test.txt'
 
@@ -62,23 +59,13 @@ folder_path_fir = _.get('Var','folder_path_fir') # Working
 
 output_folder_path = _.get('Var','output_folder_path')
 
-serviceKey = _.get('Var','serviceKey')
-
-dateList=[]
-for i in range(0,3):
-    temp = now - relativedelta(months= i)
-    dateList.append(temp.strftime('%Y%m'))
-
 #PROD
 log_file_name = _.get('Var','log_file_name') + '.txt'
 
 input_folder_path = _.get('Var','input_folder_path')
 
-# DB Session Open
-conn = pymssql.connect(host="10.31.1.192:1433", user='server_talk', password='Guseo!23', database= 'MIData')
-cursor = conn.cursor(as_dict=True)
-cursor.execute("SELECT elevatorNo, elvtrMgtNo1 + ',' + elvtrMgtNo2 as elvtrMgtNo, mntCpnyNm, subcntrCpny FROM ElvList")
-elvtrMgtNoList = cursor.fetchall()
+
+
 
 # excel_row_cnt = 1
 ######################################################
@@ -130,6 +117,14 @@ def append_txt(result, folder_path, file_name):
     except Exception as e:
         print(e)
 
+def extract_between_using_regex(text, start_char, end_char):
+    # Construct the regular expression pattern
+    pattern = re.escape(start_char) + "(.*?)" + re.escape(end_char)
+    match = re.search(pattern, text)
+    if match:
+        return match.group(1)
+    else:
+        return ""
 
 def PostForm(url, headers, field_data): # Post Parameter의 형식이 MultipartForm 일 때, Wrapping해주는 Function
     try:
@@ -139,8 +134,10 @@ def PostForm(url, headers, field_data): # Post Parameter의 형식이 MultipartF
         res.raise_for_status()
         return res
     except Exception as e:
+        tkinter.messagebox.showinfo("error_PostForm",e)
         return 'X'
 
+# 수행 순서 3
 class PartnerManagement():
     def __init__(self, id, elvNo, working) -> None:
         self.id = id # Thread 구분을 위한 ID
@@ -170,7 +167,6 @@ class PartnerManagement():
     def rqstAuthTok(self): # 실제 인증키를 생성하는 Module
         try:
             tokPath = self.tokPath
-            # url = "https://www.elevator.go.kr/js/fsp.js"
             url = "https://www.elevator.go.kr/js/elev/fsp.js"
             res = requests.get(url,timeout=self.timeOut)
             s = res.text
@@ -189,26 +185,29 @@ class PartnerManagement():
             self.sucFlag = 'X'
 
     
-    def getDBData(self): # 국가 승강기 정보센터의 대상 데이터를 조회할 때 사용할 키 값 mng1, mng2 추출
+    def getMngNum(self): # 국가 승강기 정보센터의 대상 데이터를 조회할 때 사용할 키 값 mng1, mng2 추출
         try:
-            # headers = self.headers
-            # payload = {'searchElvtrNo': self.elvNo}
-            # headers['Content-Type'] = 'application/x-www-form-urlencoded'
-            # url = 'https://www.elevator.go.kr/com/ElvtrNumAddrL01.do'
-            # s = PostForm(url, headers, payload).text
-            # if s == 'X':
-            #     raise "authToken 생성 실패"
-            # soup = bs(s, "html.parser")
+            headers = self.headers
+            payload = {'serviceKey': '+K56DZWJ9yasuWMqXf0v3TOvOCUqPCTSAx+gBIrjGGjfYwb21G98FecJ/a4T7I9RYZhUm6fRaKgM4q8qn//W2Q==','elevator_no':elv_no}
+            headers['Content-Type'] = 'application/x-www-form-urlencoded'
+            url = 'http://openapi.elevator.go.kr/openapi/service/ElevatorInformationService/getElevatorViewM'
+            s = requests.get(url, payload).text
+            tkinter.messagebox.showinfo("response",s)
+            if s == 'X':
+                raise "authToken 생성 실패"
+            
+            mng1 = extract_between_using_regex(s, '<elvtrMgtNo1>', '</elvtrMgtNo1>')
+            mng2 = extract_between_using_regex(s, '<elvtrMgtNo2>', '</elvtrMgtNo2>')
+            #soup = bs(s, "html.parser")
+            tkinter.messagebox.showinfo("mng1",mng1)
+            tkinter.messagebox.showinfo("mng2",mng2)
+            #elements = soup.select("td.txt_center > a[style='color:blue;']")[0]['onclick']
+            #s = elements[elements.find("fnElvtrDetail")+len("fnElvtrDetail"):elements.find(";")]
+            #mng1 = s.split(",")[0].replace("(","")[1:-1]
+            #mng2 = s.split(",")[1][1:-1]
 
-            # elements = soup.select("td.txt_center > a[style='color:blue;']")[0]['onclick']
-            # s = elements[elements.find("fnElvtrDetail")+len("fnElvtrDetail"):elements.find(";")]
-            # mng1 = s.split(",")[0].replace("(","")[1:-1]
-            # mng2 = s.split(",")[1][1:-1]
-
-            # self.mng1 = mng1
-            # self.mng2 = mng2
-            row = next(item for item in elvtrMgtNoList if item['elevatorNo'] == self.elvNo)
-            self.mng1, self.mng2, self.mntCpnyNm, self.subcntrCpny = row["elvtrMgtNo"].split(",")[0], row["elvtrMgtNo"].split(",")[1], row['mntCpnyNm'], row['subcntrCpny']
+            self.mng1 = mng1
+            self.mng2 = mng2
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -218,28 +217,28 @@ class PartnerManagement():
             append_txt(result=log,folder_path=output_folder_path,file_name=log_file_name)
             self.sucFlag = 'X'
 
-    # def getMntCpnyNm(self):
-    #     try:
-    #         headers = self.headers
-    #         headers['Content-Type'] = 'application/x-www-form-urlencoded'
-    #         payload = {'elevatorNo' : self.elvNo,
-    #                    'elvtrMgtNo1' : self.mng1,
-    #                    'elvtrMgtNo2' : self.mng2}
-    #         url = 'https://www.elevator.go.kr/com/ElvtrDetail.do'
-    #         s = re.sub(r',\s*]}', ']}', re.sub(r'[\n\r\t]','', PostForm(url, headers, payload).text))
-    #         if s == 'X':
-    #             raise "유지관리업체 조회실패"
-    #         d = json.loads(s)['data']
-    #         self.mntCpnyNm = d['mntCpnyNm']
-    #         self.subcntrCpny = d['subcntrCpny']
-    #     except Exception as e:
-    #         exc_type, exc_obj, exc_tb = sys.exc_info()
-    #         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-    #         log = f"{exc_type}, {fname}, {exc_tb.tb_lineno}, {str(e)}"
-    #         print(exc_type, fname, exc_tb.tb_lineno)
-    #         print(e)
-    #         append_txt(result=log,folder_path=output_folder_path,file_name=log_file_name)
-    #         self.sucFlag = 'X'
+    def getMntCpnyNm(self):
+        try:
+            headers = self.headers
+            headers['Content-Type'] = 'application/x-www-form-urlencoded'
+            payload = {'elevatorNo' : self.elvNo,
+                       'elvtrMgtNo1' : self.mng1,
+                       'elvtrMgtNo2' : self.mng2}
+            url = 'https://www.elevator.go.kr/com/ElvtrDetail.do'
+            s = re.sub(r',\s*]}', ']}', re.sub(r'[\n\r\t]','', PostForm(url, headers, payload).text))
+            if s == 'X':
+                raise "유지관리업체 조회실패"
+            d = json.loads(s)['data']
+            self.mntCpnyNm = d['mntCpnyNm']
+            self.subcntrCpny = d['subcntrCpny']
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            log = f"{exc_type}, {fname}, {exc_tb.tb_lineno}, {str(e)}"
+            print(exc_type, fname, exc_tb.tb_lineno)
+            print(e)
+            append_txt(result=log,folder_path=output_folder_path,file_name=log_file_name)
+            self.sucFlag = 'X'
 
     def getInscptHist(self):
         try:
@@ -270,30 +269,23 @@ class PartnerManagement():
 
     def getSelChk(self):
         try:
-            self.selChkList = []
             headers = self.headers
             headers['Content-Type'] = 'application/x-www-form-urlencoded'
-            # payload = {'elevatorNo' : self.elvNo,
-            #            'elvtrMgtNo1' : self.mng1,
-            #            'elvtrMgtNo2' : self.mng2}
-            # url = 'https://www.elevator.go.kr/com/selectSelchkList.do'
-            # res = PostForm(url, headers, payload)
-            for ym in dateList:
-                url = rf"http://openapi.elevator.go.kr/openapi/service/ElevatorSelfCheckService/getSelfCheckList?serviceKey={serviceKey}&pageNo=1&numOfRows=1&yyyymm={ym}&elevator_no={self.elvNo}"
-                res = requests.get(url)
-                json_data = xmltodict.parse(res.text)
-                if json_data['response']['body']['totalCount'] != '0':
-                    self.selChkList.append(json_data['response']['body']['items']['item'])
-            # if res == 'X':
-            #     raise "자체점검이력 조회실패"
-            # s = res.text
-            # fixed_json_string = re.sub(r',\s*]}', ']}', re.sub(r'[\n\r\t]','', s))
-            # l = json.loads(fixed_json_string)['data']
-            # if len(l) > 3:
-            #     selChkList = l[:3]
-            # else:
-            #     selChkList = l
-            # self.selChkList = selChkList
+            payload = {'elevatorNo' : self.elvNo,
+                       'elvtrMgtNo1' : self.mng1,
+                       'elvtrMgtNo2' : self.mng2}
+            url = 'https://www.elevator.go.kr/com/selectSelchkList.do'
+            res = PostForm(url, headers, payload)
+            if res == 'X':
+                raise "자체점검이력 조회실패"
+            s = res.text
+            fixed_json_string = re.sub(r',\s*]}', ']}', re.sub(r'[\n\r\t]','', s))
+            l = json.loads(fixed_json_string)['data']
+            if len(l) > 3:
+                selChkList = l[:3]
+            else:
+                selChkList = l
+            self.selChkList = selChkList
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -320,20 +312,20 @@ class PartnerManagement():
         APPLCENDT = self.applcEnDt
         
         ELEVATORNO = self.elvNo
-        MNTCPNYNM = str(self.mntCpnyNm).encode('ISO-8859-1').decode('cp949')
-        SUBCNTRCPNY = str(self.subcntrCpny).encode('ISO-8859-1').decode('cp949')
+        MNTCPNYNM = self.mntCpnyNm
+        SUBCNTRCPNY = self.subcntrCpny
 
         selChkList = self.selChkList
         for i, item in enumerate(selChkList):
             if i == 0:
                 SELFINSCPTM1CPNYNM = item['companyNm']
-                SELFINSCPTM1DE = item['selchkBeginDate'][:6]
+                SELFINSCPTM1DE = item['selChkYm']
             elif i == 1:
                 SELFINSCPTM2CPNYNM = item['companyNm']
-                SELFINSCPTM2DE = item['selchkBeginDate'][:6]
+                SELFINSCPTM2DE = item['selChkYm']
             elif i == 2:
                 SELFINSCPTM3CPNYNM = item['companyNm']
-                SELFINSCPTM3DE = item['selchkBeginDate'][:6]
+                SELFINSCPTM3DE = item['selChkYm']
             else:
                 break
         
@@ -373,22 +365,25 @@ class PartnerManagement():
             f.write(f"selfInscptM1De=수정필요\n")
             f.write(f"selfInscptM1CpnyNm=수정필요\n")
 
+    # 수행 순서 4
     def main(self):
         # global excel_row_cnt
         start = time.time()
-        for i in range(3):
+        for i in range(100):
             try:
                 self.sucFlag = ""
                 self.getAuthTok()
                 if self.sucFlag == 'X':
                     raise Exception('Token 생성 실패')
-
-                self.getDBData()
+                
+                self.getMngNum()
                 if self.sucFlag == 'X':
                     if i == 4:
                         self.WriteNoData()
                         break
-                    raise Exception('MngNo, mntCpnyNm, subcntrCpny 추출 실패')
+                    raise Exception('MngNo 추출 실패')
+                
+                self.getMntCpnyNm()
                 if self.sucFlag == 'X':
                     raise Exception('점검업체 코드 추출 API 조회 실패')
                 
@@ -403,11 +398,11 @@ class PartnerManagement():
                 self.WriteToFile()
 
             except Exception as e:
+                tkinter.messagebox.showinfo("error_Main",e)
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 log = f"elvNo: {self.elvNo}, {exc_type}, {fname}, {exc_tb.tb_lineno}, {str(e)}"
                 append_txt(result=log,folder_path=output_folder_path,file_name=log_file_name)
-                print(log)
                 self.sucFlag = 'X'
                 next(delay_limiter)
             finally:
@@ -426,18 +421,14 @@ if not os.path.isdir(folder_path_fir):
 
 
 
-
+# 수행 순서 2
 def work_function(id, elvNo,folderPath):
     # next(api_rate_limiter)
     PartnerManagement(id, elvNo,folderPath)
 
-# folderPath = folder_path_fir
-# for i, elv_no in enumerate(elv_no_list):
-#     work_function(i,elv_no,folderPath)
 
-# exit()
-
-with ThreadPoolExecutor() as executor:
+# 수행 순서 1
+with ThreadPoolExecutor() as executor:          # with절 : 쓰레드사용 후 자원 반납
     for i, elv_no in enumerate(elv_no_list):
         folderPath = folder_path_fir
         # if i <= floor_total_cnt:
@@ -451,6 +442,6 @@ with ThreadPoolExecutor() as executor:
 # Finish log
 with open(rf"{input_folder_path}\finish.txt",'w') as f:
     f.write(str(datetime.datetime.now() - now)[:11])
-msg = "finish"
+msg = "finish"  
 print(msg)
 clipboard.copy(msg)
