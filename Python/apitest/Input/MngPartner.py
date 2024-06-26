@@ -211,6 +211,8 @@ class PartnerManagement():
 
             # self.mng1 = mng1
             # self.mng2 = mng2
+
+            #DB에서 데이터 추출 부분
             row = next(item for item in elvtrMgtNoList if item['elevatorNo'] == self.elvNo)
             self.mng1, self.mng2, self.mntCpnyNm, self.subcntrCpny = row["elvtrMgtNo"].split(",")[0], row["elvtrMgtNo"].split(",")[1], row['mntCpnyNm'], row['subcntrCpny']
         except Exception as e:
