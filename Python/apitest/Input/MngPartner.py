@@ -213,7 +213,8 @@ class PartnerManagement():
             # self.mng2 = mng2
 
             #DB에서 데이터 추출 부분
-            # next함수가 db관련 라이브러리 함수로 예상, 관련 사용법 알아보기
+            # elvtrMgtNoList 받아오는 부분 : 78 Line
+            # next함수 사용하여 각 row 변수 선언
             row = next(item for item in elvtrMgtNoList if item['elevatorNo'] == self.elvNo)
             self.mng1, self.mng2, self.mntCpnyNm, self.subcntrCpny = row["elvtrMgtNo"].split(",")[0], row["elvtrMgtNo"].split(",")[1], row['mntCpnyNm'], row['subcntrCpny']
         except Exception as e:
