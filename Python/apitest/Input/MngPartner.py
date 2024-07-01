@@ -76,8 +76,8 @@ log_file_name = _.get('Var','log_file_name') + '.txt'
 input_folder_path = _.get('Var','input_folder_path')
 
 # DB Session Open
-conn = pymssql.connect(host="10.31.1.192:1433", user='server_talk', password='Guseo!23', database= 'MIData')
-cursor = conn.cursor(as_dict=True)
+conn = pymssql.connect(host="10.31.1.192:1433", user='server_talk', password='Guseo!23', database= 'MIData') # 계정정보 입력
+cursor = conn.cursor(as_dict=True) # cursor 기능 알아보기
 cursor.execute("SELECT elevatorNo, elvtrMgtNo1 + ',' + elvtrMgtNo2 as elvtrMgtNo, mntCpnyNm, subcntrCpny FROM ElvList")
 elvtrMgtNoList = cursor.fetchall()
 
