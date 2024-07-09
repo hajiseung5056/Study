@@ -5,12 +5,12 @@ url = "http://data.krx.co.kr/comm/bldAttendant/getJsonData.cmd"
 
 # 페이로드
 payload = {
-    'bld': 'dbms/MDC/STAT/srt/MDCSTAT30201',
-    'locale': 'ko_KR',
-    'indTpCd': '1',
-    'mktTpCd': '1',
-    'indAggClssCd': '001',
-    'idxIndCd': '001',
+    'bld': 'dbms/MDC/STAT/srt/MDCSTAT30001',
+    'tboxisuCd_finder_srtisu0_0' : '019210%2F%EC%99%80%EC%9D%B4%EC%A7%80-%EC%9B%90',
+    'isuCd': 'KR7019210004',
+    'isuCd2': 'KR7019210004',
+    'codeNmisuCd_finder_srtisu0_0': '%EC%99%80%EC%9D%B4%EC%A7%80-%EC%9B%90',
+    'param1isuCd_finder_srtisu0_0': "",
     'strtDd': '20240607',
     'endDd': '20240708',
     'share': '1',
