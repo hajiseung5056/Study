@@ -1,10 +1,10 @@
 class Stock:
-    def __init__(self,name,code,per,pbr,배당수익률):
+    def __init__(self,name,code,per,pbr,dividend):
         self.name = name
         self.code = code
         self.per = per
         self.pbr = pbr
-        self.배당수익률 = 배당수익률
+        self.dividend = dividend
 
 
     def set_name(self,name):
@@ -12,6 +12,16 @@ class Stock:
 
     def set_code(self,code):
         self.code = code
+
+    def set_per(self,per):
+        self.per = per
+
+    def set_pbr(self,pbr):
+        self.pbr = pbr
+
+    def set_dividend(self,dividend):
+        self.dividend = dividend
+
 
     def get_name(self):
         return self.name
