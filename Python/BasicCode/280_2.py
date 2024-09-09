@@ -1,10 +1,11 @@
 import random
 
-class Account:
 
+class Account:
+    # class variable
     account_count = 0
 
-    def __init__(self,name,balance):
+    def __init__(self, name, balance):
         self.deposit_count = 0
         self.deposit_log = []
         self.withdraw_log = []
@@ -12,23 +13,22 @@ class Account:
         self.name = name
         self.balance = balance
         self.bank = "SC은행"
-        
-        acc1 = random.randint(0,999)
-        acc2 = random.randint(0,99)
-        acc3 = random.randint(0,999999)
 
-        acc1 = str(acc1).zfill(3)
-        acc2 = str(acc2).zfill(2)
-        acc3 = str(acc3).zfill(6)
-        
-        self.accountnum = acc1 + "-" + acc2 + "-" + acc3
+        # 3-2-6
+        num1 = random.randint(0, 999)
+        num2 = random.randint(0, 99)
+        num3 = random.randint(0, 999999)
 
+        num1 = str(num1).zfill(3)  # 1 -> '1' -> '001'
+        num2 = str(num2).zfill(2)  # 1 -> '1' -> '01'
+        num3 = str(num3).zfill(6)  # 1 -> '1' -> '0000001'
+        self.account_number = num1 + '-' + num2 + '-' + num3  # 001-01-000001
         Account.account_count += 1
-    
+
     @classmethod
     def get_account_num(cls):
-        return cls.account_count
-    
+        print(cls.account_count)  # Account.account_count
+
     def deposit(self, amount):
         if amount >= 1:
             self.deposit_log.append(amount)
